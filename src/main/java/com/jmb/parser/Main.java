@@ -18,14 +18,15 @@ public class Main {
         PropertyConfigurator.configure(PROPERTIES);
 
         Scanner in = new Scanner(System.in);
-        System.out.print("Введите адрес сайта: ");
+        System.out.print("Введите ссылку: ");
         String url = in.nextLine();
 
         Parser parser = new Parser(url);
         try {
-            StringBuilder result = parser.run();
+            String result = parser.parseFromUrl();
+
             DatabaseConnection connection = new DatabaseConnection();
-            connection.insertValues(result.toString());
+            connection.insertValues(result);
         } catch (IllegalArgumentException | SQLException exception) {
             LOG.error("Url: {}  is not correct", url);
         }

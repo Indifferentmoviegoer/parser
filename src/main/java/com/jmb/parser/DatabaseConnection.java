@@ -4,16 +4,28 @@ import io.github.cdimascio.dotenv.Dotenv;
 
 import java.sql.*;
 
+/**
+ * Класс для работы с базой данных
+ *
+ * @author Иван Волощенко
+ */
 public class DatabaseConnection {
-    private static final Dotenv DOTENV = Dotenv.load();
-    private Connection conn;
 
+    /** Константа для чтения данных из файла конфигурации */
+    private static final Dotenv DOTENV = Dotenv.load();
+
+    /** Конструктор класса com.jmb.parser.DatabaseConnection */
     public DatabaseConnection() throws SQLException {
         this.createTable();
     }
 
-    public void connect() throws SQLException {
-        this.conn = DriverManager
+    /**
+     * Создает соединение с базой данных
+     *
+     * @return Текущее соединение
+     */
+    public Connection connect() throws SQLException {
+        return DriverManager
                 .getConnection(
                         DOTENV.get("MYSQL_CONNECTION"),
                         DOTENV.get("MYSQL_USERNAME"),
@@ -21,9 +33,15 @@ public class DatabaseConnection {
                 );
     }
 
+    /**
+     * Сохранение статистики в базу данных
+     *
+     * @param data Ссылка на страницу/путь к файлу
+     */
     public void insertValues(String data) {
         try {
-            this.connect();
+            Connection conn = this.connect();
+
             PreparedStatement insertStatement = conn.prepareStatement(
                     "INSERT INTO statistics (data)" +
                             " VALUES (?);"
@@ -32,14 +50,16 @@ public class DatabaseConnection {
             insertStatement.executeUpdate();
 
             conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
     }
 
+    /** Низкоуровневое подобие миграции */
     public void createTable() {
         try {
-            this.connect();
+            Connection conn = this.connect();
+
             PreparedStatement createStatement = conn.prepareStatement(
                     "CREATE TABLE IF NOT EXISTS `statistics` (" +
                             "  `id` int(11) NOT NULL auto_increment," +
@@ -50,8 +70,8 @@ public class DatabaseConnection {
             createStatement.executeUpdate();
 
             conn.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
     }
 }

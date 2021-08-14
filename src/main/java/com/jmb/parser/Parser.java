@@ -3,17 +3,18 @@ package com.jmb.parser;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
 /**
- * Класс разбивает содержимое страницы сайта на слова
+ * Класс разбивает содержимое на слова
  *
  * @author Иван Волощенко
  */
 public class Parser {
 
-    /** Адрес страницы сайта */
+    /** Ссылка на страницу/путь к файлу */
     public String url;
 
     /** Эмуляция запроса от браузера */
@@ -22,32 +23,54 @@ public class Parser {
     /**
      * Конструктор класса com.jmb.parser.Parser
      *
-     * @param url Адрес страницы сайта
+     * @param url Ссылка на страницу/путь к файлу
      */
     public Parser(String url) {
         this.url = url;
     }
 
     /**
-     * Метод по разбивке содержимого на слова
+     * Парсинг html по url страницы
      *
-     * @throws IOException исключение вызываемое библиотекой Jsoup
+     * @throws IOException исключение вызываемое библиотекой Jsoup у метода get
      */
-    public StringBuilder run() throws IOException {
+    public String parseFromUrl() throws IOException {
         Document document = Jsoup.connect(url)
                 .userAgent(userAgent)
                 .get();
+
+        return this.splitUniqueWords(document);
+    }
+
+    /**
+     * Парсинг html из файла
+     *
+     * @throws IOException исключение вызываемое библиотекой Jsoup у метода get
+     */
+    public String parseFromFile() throws IOException {
+        File input = new File(url);
+        Document document = Jsoup.parse(input, "UTF-8");
+
+        return this.splitUniqueWords(document);
+    }
+
+    /**
+     * Получение количества уникальных слов
+     *
+     * @param document Html документ
+     */
+    public String splitUniqueWords(Document document) {
         String textBody = document.body().text();
 
-        List<String> list = Arrays.asList(textBody.split("[ ,.!\"?;:\\]\\[()\n\r\t]+"));
+        List<String> list = Arrays.asList(textBody.split("[ ,.!\"?;:\\]\\[)(\n\r\t]+"));
         Set<String> uniqueWords = new HashSet<>(list);
-        StringBuilder result = new StringBuilder(" ");
+        StringBuilder result = new StringBuilder();
 
         for (String word : uniqueWords) {
-            System.out.println(word + ": " + Collections.frequency(list, word));
-            result.append(word).append(": ").append(Collections.frequency(list, word)).append(" \n");
+            System.out.println(word + " - " + Collections.frequency(list, word));
+            result.append(word).append(" - ").append(Collections.frequency(list, word)).append(" \n");
         }
 
-        return result;
+        return result.toString();
     }
 }
