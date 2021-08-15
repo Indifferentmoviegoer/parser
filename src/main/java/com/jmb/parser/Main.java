@@ -3,6 +3,8 @@ package com.jmb.parser;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -27,9 +29,10 @@ public class Main {
 
             DatabaseConnection connection = new DatabaseConnection();
             connection.insertValues(result);
-        } catch (IllegalArgumentException | SQLException exception) {
-            LOG.error("Url: {}  is not correct", url);
+        } catch (IllegalArgumentException | SQLException | FileNotFoundException exception) {
+            LOG.error(String.valueOf(exception));
         }
+
         LOG.info("Ending application.");
     }
 }

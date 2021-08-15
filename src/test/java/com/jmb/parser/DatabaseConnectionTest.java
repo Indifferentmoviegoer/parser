@@ -26,7 +26,7 @@ class DatabaseConnectionTest {
     }
 
     @Test
-    void insertError() throws SQLException {
+    void insertValuesError() throws SQLException {
         String data = ";drop table `statistics`;";
 
         DatabaseConnection connection = new DatabaseConnection();

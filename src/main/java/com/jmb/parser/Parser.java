@@ -4,6 +4,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class Parser {
     /**
      * Парсинг html по url страницы
      *
-     * @throws IOException исключение вызываемое библиотекой Jsoup у метода get
+     * @throws IOException Исключение вызываемое библиотекой Jsoup у метода get
      */
     public String parseFromUrl() throws IOException {
         Document document = Jsoup.connect(url)
@@ -45,7 +46,8 @@ public class Parser {
     /**
      * Парсинг html из файла
      *
-     * @throws IOException исключение вызываемое библиотекой Jsoup у метода get
+     * @throws FileNotFoundException Исключение, вызываемое при некорректном пути к файлу
+     * @throws IOException Исключение, вызываемое библиотекой Jsoup у метода get
      */
     public String parseFromFile() throws IOException {
         File input = new File(url);

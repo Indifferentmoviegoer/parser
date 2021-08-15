@@ -43,7 +43,7 @@ public class DatabaseConnection {
             Connection conn = this.connect();
 
             PreparedStatement insertStatement = conn.prepareStatement(
-                    "INSERT INTO statistics (data)" +
+                    "INSERT INTO `statistics` (data)" +
                             " VALUES (?);"
             );
             insertStatement.setString(1, data);
