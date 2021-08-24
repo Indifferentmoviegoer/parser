@@ -13,7 +13,7 @@ class ParserTest {
 
     @Test
     void parseFromUrl() throws IOException {
-        Parser parser = new Parser("https://www.simbirsoft.com/");
+        Parser parser = new Parser("https://www.google.com/");
         parser.parseFromUrl();
     }
 
@@ -36,7 +36,7 @@ class ParserTest {
 
     @Test
     void parseFromFileError(){
-        Parser parser = new Parser("https://www.simbirsoft.com/");
+        Parser parser = new Parser("https://www.google.com/");
 
         assertThrows(FileNotFoundException.class, parser::parseFromFile);
     }
